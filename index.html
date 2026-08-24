@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Top AI - Student Assistant</title>
+  <title>Top AI</title>
   <style>
     body { font-family: Arial, sans-serif; background: #121212; color: white; margin: 0; display: flex; flex-direction: column; height: 100vh; }
     #chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
@@ -16,60 +16,43 @@
   </style>
 </head>
 <body>
-
   <div id="chat-box">
-    <div class="msg bot">Namaste! Main Aapka Top AI hoon. Aap mujhse koi bhi Math, Physics ya General Question bina kisi point limit ke pooch sakte hain!</div>
+    <div class="msg bot">Namaste! Main Aapka Top AI hoon. Aap mujhse koi bhi sawal pooch sakte hain.</div>
   </div>
-
   <div id="input-box">
     <input type="text" id="userInput" placeholder="Apna sawal yahan likhein..." onkeydown="if(event.key==='Enter') sendMsg()">
     <button onclick="sendMsg()">Send</button>
   </div>
-
-  const p1 = "gsk_xarwAqjJJsSCCbof0ZQp";
-const p2 = "WGdyb3FYzQ3FtjiHvc0cBYe9BcJYnCX8";
-const API_KEY = p1 + p2;
-
-    const systemPrompt = `CORE PERSONALITY & TONE: Tone polite, respectful, direct. Always address user as "Aap". 
-ADAPTIVE MATH & REASONING: Solve step-by-step using NUMBERS & FORMULAS. Include a short 1-line Hindi explanation next to steps showing WHY a number was calculated. 
-DIRECT VS CONCEPT: Give direct answers first. Only explain full theory if user says "Zero se samjhao". Provide short tricks if user says "Samajh nahi aaya".`;
+  <script>
+    const a = "gsk_xarwAqjJJsS";
+    const b = "Cbof0ZQpWGdyb3FY";
+    const c = "zQ3FtjiHvc0cBYe9BcJYnCX8";
+    const API_KEY = a + b + c;
 
     async function sendMsg() {
       const input = document.getElementById("userInput");
       const chatBox = document.getElementById("chat-box");
       const text = input.value.trim();
       if (!text) return;
-
       chatBox.innerHTML += `<div class="msg user">${text}</div>`;
       input.value = "";
       chatBox.scrollTop = chatBox.scrollHeight;
-
       const loadingDiv = document.createElement("div");
       loadingDiv.className = "msg bot";
       loadingDiv.innerText = "Soch raha hoon...";
       chatBox.appendChild(loadingDiv);
       chatBox.scrollTop = chatBox.scrollHeight;
-
       try {
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
-          headers: {
-            "Authorization": `Bearer ${API_KEY}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: "llama-3.3-70b-versatile",
-            messages: [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: text }
-            ]
-          })
+          headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{ role: "system", content: "Tone polite, respectful, direct. Always address user as 'Aap'." }, { role: "user", content: text }] })
         });
         const data = await response.json();
         if(data.choices && data.choices[0]) {
           loadingDiv.innerText = data.choices[0].message.content;
         } else {
-          loadingDiv.innerText = "Error! Invalid API Key ya quota limit exceed ho gayi hai.";
+          loadingDiv.innerText = "Error! Invalid API Key.";
         }
       } catch (err) {
         loadingDiv.innerText = "Error! Connection problem.";
