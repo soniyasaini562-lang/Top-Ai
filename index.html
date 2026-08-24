@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Top AI - Unlimited Student Assistant</title>
+  <title>Top AI - Student Assistant</title>
   <style>
     body { font-family: Arial, sans-serif; background: #121212; color: white; margin: 0; display: flex; flex-direction: column; height: 100vh; }
     #chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-    .msg { padding: 10px 14px; border-radius: 8px; max-width: 80%; line-height: 1.4; }
+    .msg { padding: 10px 14px; border-radius: 8px; max-width: 80%; line-height: 1.4; word-wrap: break-word; }
     .user { background: #2563eb; align-self: flex-end; }
     .bot { background: #1e293b; align-self: flex-start; border: 1px solid #334155; }
     #input-box { display: flex; padding: 10px; background: #1e293b; gap: 8px; }
@@ -27,7 +27,7 @@
   </div>
 
   <script>
-    const API_KEY = "Gsk_ItvOYcMYVUYly2mWKAuWWGdyb3FYCJ50T3QbQYYfw6vMcVl3IB9s";
+    const API_KEY = "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";
 
     const systemPrompt = `CORE PERSONALITY & TONE: Tone polite, respectful, direct. Always address user as "Aap". 
 ADAPTIVE MATH & REASONING: Solve step-by-step using NUMBERS & FORMULAS. Include a short 1-line Hindi explanation next to steps showing WHY a number was calculated. 
@@ -65,9 +65,13 @@ DIRECT VS CONCEPT: Give direct answers first. Only explain full theory if user s
           })
         });
         const data = await response.json();
-        loadingDiv.innerText = data.choices[0].message.content;
+        if(data.choices && data.choices[0]) {
+          loadingDiv.innerText = data.choices[0].message.content;
+        } else {
+          loadingDiv.innerText = "Error! Invalid API Key ya quota limit exceed ho gayi hai.";
+        }
       } catch (err) {
-        loadingDiv.innerText = "Error! Kripya API Key check karein.";
+        loadingDiv.innerText = "Error! Connection problem.";
       }
       chatBox.scrollTop = chatBox.scrollHeight;
     }
